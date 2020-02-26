@@ -1,0 +1,139 @@
+import random
+
+def howManyPlayers(): # This function will determine if this will be a 1 or 2 player game
+    print("How many players? (Enter either 1 or 2)")
+    player = 0
+    while (player != "1" and player != "2"):
+        try:
+            player = int(input())
+            if player == 1: # If 1 is entered, Player vs. Computer
+                print("1-PLAYER: YOU versus COM")
+                return "1"
+            elif player == 2: # If 2 is entered, Player 1 vs. Player 2
+                print("2-PLAYERS: P1 versus P2")
+                return "2"
+            else:
+                print("Enter either 1 or 2.")
+        except:
+            print("Enter either 1 or 2.")
+def createBoard(board): #This function prints out the board for tic tac toe
+    print('   |   |')
+    print(' ' + board[1] + ' | ' + board[2] + ' | ' + board[3])
+    print('   |   |')
+    print('-----------')
+    print('   |   |')
+    print(' ' + board[4] + ' | ' + board[5] + ' | ' + board[6])
+    print('   |   |')
+    print('-----------')
+    print('   |   |')
+    print(' ' + board[7] + ' | ' + board[8] + ' | ' + board[9])
+    print('   |   |')
+def inputPlayerLetter(): # This function lets the player decide which letter they want to be
+    # The letter not chosen is automatically set to the second player
+    letter = ""
+    print("PLAYER 1, Do you want to be X or O? (Please enter either 'X' or 'O'.)")
+    while (letter != "X" or letter != "O"):
+        try:
+            letter = input().upper() # Even if the user enters 'x' or 'o', the code will correct it to capital letters
+            if letter == "X":
+                return ["X", "O"] # If P1 chooses 'X', P2 or the Computer is 'O'
+            elif letter == "O":
+                return ["O", "X"] # If P1 chooses 'O', P2 or the Computer is 'X'
+            else:
+                print("Enter either 'X' or 'O'.")
+        except:
+            print("Enter either 'X' or 'O'.")
+def whoGoesFirst1(): # This function randomly chooses who will go first in Player vs. Computer
+    if random.randint(0, 1) == 0:
+        return "COMPUTER" # If 0 is randomly selected, the computer will move first
+    else:
+        return "PLAYER 1" # If 1 is randomly selected, P1 will move first
+def whoGoesFirst2(): # This function randomly chooses who will go first in P1 vs. P2
+    if random.randint(1, 2) == 2:
+        return "PLAYER 2" # If 2 is randomly selected, P2 will move first
+    else:
+        return "PLAYER 1" # If 1 is randomly selected, P1 will move first
+def playAgain(): # This function returns True if the player wants to play again, otherwise it returns False
+    print("Do you want to play again? (Y/N)")
+    answer = ""
+    while (answer != "Y" or answer != "N"):
+        try:
+            answer = input().upper()
+            if (answer.upper() == "Y"):
+                return True
+            elif (answer.upper() == "N"):
+                return False
+            else:
+                print("Enter 'Y' or 'N'.")
+        except:
+            print("Enter 'Y' for ‘Yes’ or 'N' for ‘No’.")
+def makeMove(board, letter, move): # This function assigns the player's letter to the space of their choice
+    board[move] = letter
+def isWinner(bd, ltr): # This function returns true if 
+    return ((bd[1] == ltr and bd[2] == ltr and bd[3] == ltr) or # top row
+            (bd[4] == ltr and bd[5] == ltr and bd[6] == ltr) or # middle row
+            (bd[7] == ltr and bd[8] == ltr and bd[9] == ltr) or # bottow row
+            (bd[7] == ltr and bd[4] == ltr and bd[1] == ltr) or # left column
+            (bd[8] == ltr and bd[5] == ltr and bd[2] == ltr) or # middle column
+            (bd[9] == ltr and bd[6] == ltr and bd[3] == ltr) or # right column
+            (bd[7] == ltr and bd[5] == ltr and bd[3] == ltr) or # diagonal 1
+            (bd[9] == ltr and bd[5] == ltr and bd[1] == ltr)) # diagonal 2
+def getBoardCopy(board): # This function makes a duplicate of the board and returns the duplicate
+    boardCopy = []
+    for i in board:
+        boardCopy.append(i)
+    return boardCopy
+def checkSpace(board, move): # returns True if a space is free on the board
+    return board[move] == " "
+def getPlayer1Move(board): # This function allows the player to make their move
+    p1Move = " "
+    while p1Move not in "1 2 3 4 5 6 7 8 9".split() or not checkSpace(board, int(p1Move)):
+        print("Player 1, What is your move? (Enter 1 - 9)")
+        p1Move = input()
+    return int(p1Move)
+def chooseComputerMove(board, movesList): # In 1-Player Game, this function will pick where the computer's move will go
+    possibleMoves = []
+    for i in movesList:
+        if checkSpace(board, i):
+            possibleMoves.append(i)
+    if len(possibleMoves) != 0:
+        return random.choice(possibleMoves)
+    else:
+        return None
+def getComputerMove(board, computerLetter): # In 1-Player Game, this function will make the computer's move
+    if computerLetter == "O":
+        player1Letter = "X"
+    else:
+        player1Letter = "O"
+
+    for i in range(1, 10): # Computer checks if IT can win in one move
+        copy = getBoardCopy(board)
+        if checkSpace(copy, i):
+            makeMove(copy, computerLetter, i)
+            if isWinner(copy, computerLetter):
+                return i
+    for i in range(1, 10): # Computer checks if the PLAYER can win in one move
+        copy = getBoardCopy(board)
+        if checkSpace(copy, i):
+            makeMove(copy, player1Letter, i)
+            if isWinner(copy, player1Letter):
+                return i
+
+    move = chooseComputerMove(board, [1, 3, 7, 9]) # Try to take the corners, if they are free
+    if move != None:
+        return move
+    if checkSpace(board, 5): # Try to take the center, if it is free
+        return 5
+    return chooseComputerMove(board, [2, 4, 6, 8]) # Move on one of the sides
+def getPlayer2Move(board): # This function will be Player 2's Move
+    p2Move = ""
+    while p2Move not in "1 2 3 4 5 6 7 8 9".split() or not checkSpace(board, int(p2Move)):
+        print("Player 2, What will be your move? (Enter 1 - 9)")
+        p2Move = input()
+    return int(p2Move)
+def isBoardFull(board): # This function will return True if every space on the board has been taken
+    for i in range(1, 10):
+        if checkSpace(board, i):
+            return False
+    return True
+

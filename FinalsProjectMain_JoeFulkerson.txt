@@ -1,0 +1,106 @@
+import random
+import ticTacToeFunctions
+#Joe Fulkerson
+#Finals Project
+print("Welcome to Tic Tac Toe!")
+start = False
+##if ticTacToeFunctions.ready() == True:
+start = True
+while start:
+    theBoard = [" "] * 10
+    players = ticTacToeFunctions.howManyPlayers()
+    if (players == "1"): # If 1 is entered, 1-PLAYER game starts
+        player1Letter, computerLetter = ticTacToeFunctions.inputPlayerLetter()
+        print("PLAYER 1: " + player1Letter)
+        print("COMPUTER: " + computerLetter)
+        turn1 = ticTacToeFunctions.whoGoesFirst1()
+        print(turn1 + " will go first.")
+        gameIsPlaying = True
+        while gameIsPlaying:
+            if turn1 == "PLAYER 1": # PLAYER 1'S TURN
+                ticTacToeFunctions.createBoard(theBoard)
+                move = ticTacToeFunctions.getPlayer1Move(theBoard)
+                ticTacToeFunctions.makeMove(theBoard, player1Letter, move)
+
+                if ticTacToeFunctions.isWinner(theBoard, player1Letter):
+                    ticTacToeFunctions.createBoard(theBoard) # If P1 has 3 in a row of any direction, P1 wins
+                    print("PLAYER 1 wins!")
+                    gameIsPlaying = False # Game ends
+                    if ticTacToeFunctions.playAgain() == False: # User is given the option to play again
+                        start = False
+                else:
+                    if ticTacToeFunctions.isBoardFull(theBoard): # if neither COM or P1 has made 3 in a row,
+                        ticTacToeFunctions.createBoard(theBoard) # no one wins
+                        print("The game has ended in a tie.")
+                        gameIsPlaying = False # Game ends
+                        if ticTacToeFunctions.playAgain() == False: # User is given the option to play again
+                            start = False
+                    else:
+                        turn1 = "COMPUTER"
+            elif turn1 == "COMPUTER": # COMPUTER'S TURN
+                move = ticTacToeFunctions.getComputerMove(theBoard, computerLetter)
+                ticTacToeFunctions.makeMove(theBoard, computerLetter, move)
+
+                if ticTacToeFunctions.isWinner(theBoard, computerLetter): # If COM has 3 in a row, COM wins
+                    ticTacToeFunctions.createBoard(theBoard)
+                    print("The computer wins.")
+                    gameIsPlaying = False 
+                    if ticTacToeFunctions.playAgain() == False: # User is given the option to play again
+                        start = False
+                else:
+                    if ticTacToeFunctions.isBoardFull(theBoard): # if neither COM or P1 has made 3 in a row,
+                        ticTacToeFunctions.createBoard(theBoard) # no one wins
+                        print("The game has ended in a tie.")
+                        gameIsPlaying = False # Game ends
+                        if ticTacToeFunctions.playAgain() == False: # User is given the option to play again
+                            start = False
+                    else:
+                        turn1 = "PLAYER 1"
+    elif (players == "2"): # If 2 is entered, 2-PLAYER game starts 
+        player1Letter, player2Letter = ticTacToeFunctions.inputPlayerLetter() # P1 chooses their letter first, P2 gets remaining letter
+        print("PLAYER 1: " + player1Letter)
+        print("PLAYER 2: " + player2Letter)
+        turn2 = ticTacToeFunctions.whoGoesFirst2()
+        print(turn2 + " will go first.")
+        gameIsPlaying = True
+        while gameIsPlaying:
+            if turn2 == "PLAYER 1": # PLAYER 1'S TURN
+                ticTacToeFunctions.createBoard(theBoard)
+                move = ticTacToeFunctions.getPlayer1Move(theBoard)
+                ticTacToeFunctions.makeMove(theBoard, player1Letter, move)
+
+                if ticTacToeFunctions.isWinner(theBoard, player1Letter):
+                    ticTacToeFunctions.createBoard(theBoard) # If P1 has 3 in a row of any direction, P1 wins
+                    print("PLAYER 1 wins!")
+                    gameIsPlaying = False # Game ends
+                    if ticTacToeFunctions.playAgain() == False: # User is given the option to play again
+                        start = False
+                else:
+                    if ticTacToeFunctions.isBoardFull(theBoard): # if neither player has made 3 in a row,
+                        ticTacToeFunctions.createBoard(theBoard) # no one wins
+                        print("The game has ended in a tie.")
+                        gameIsPlaying = False # Game ends
+                        if ticTacToeFunctions.playAgain() == False: # User is given the option to play again
+                            start = False
+                    else:
+                        turn2 = "PLAYER 2"
+            elif turn2 == "PLAYER 2": # PLAYER 2'S TURN
+                ticTacToeFunctions.createBoard(theBoard)
+                move = ticTacToeFunctions.getPlayer2Move(theBoard)
+                ticTacToeFunctions.makeMove(theBoard, player2Letter, move)
+
+                if ticTacToeFunctions.isWinner(theBoard, player2Letter): # If P2 has three in a row, P2 wins
+                    ticTacToeFunctions.createBoard(theBoard)
+                    print ("PLAYER 2 Wins!!!")
+                    gameIsPlaying = False 
+                    if ticTacToeFunctions.playAgain() == False: # User is given the option to play again
+                        start = False
+                else:
+                    if ticTacToeFunctions.isBoardFull(theBoard):
+                        ticTacToeFunctions.createBoard(theBoard)
+                        print("The game has ended in a tie.")
+                        gameIsPlaying = False 
+                        if ticTacToeFunctions.playAgain() == False: # User is given the option to play again
+                            start = False
+                    else:
+                        turn2 = "PLAYER 1"
